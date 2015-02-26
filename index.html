@@ -12,23 +12,20 @@
         var $body = $('body');
         $body.html('');
 
-        var oldTweetCount = streams.home.length;
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
-        }
+
+        var oldTweetCount = 0;
+
 
         function showNewTweets() {
-            var x = 3;  // 5 Second interval
+            var x = 3;  // 3 Second interval
 
             for (var i = oldTweetCount; i < streams.home.length; i++) { //print new tweets 
               var tweet = streams.home[i];
-              var $tweet = $('<div></div>');
+              var $tweet     = $('<div></div>');
+              var $timestamp = $('<div></div>');
               $tweet.text('@' + tweet.user + ': ' + tweet.message);
+              $timestamp.text(streams.home[i].created_at);
+              $timestamp.prependTo($body);
               $tweet.prependTo($body);
             }
             oldTweetCount = streams.home.length;
