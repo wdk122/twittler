@@ -34,7 +34,7 @@
               var $timestamp = $('<div></div>');
               var $user      = $('<a href="#"></a>');
 
-              $user.text(streams.home[i].user);
+              $user.text("@" + streams.home[i].user);
               $tweet.text(': ' + tweet.message);
 
               $timestamp.text(streams.home[i].created_at);
