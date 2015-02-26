@@ -17,7 +17,7 @@
         while(index >= 0){
           var tweet = streams.home[index];
           var $tweet = $('<div></div>');
-          $tweet.text(index + ' @' + tweet.user + ': ' + tweet.message + "..." + streams.home.length);
+          $tweet.text('@' + tweet.user + ': ' + tweet.message);
           $tweet.appendTo($body);
           index -= 1;
         }
@@ -28,7 +28,7 @@
             for (var i = oldTweetCount; i < streams.home.length; i++) { //print new tweets 
               var tweet = streams.home[i];
               var $tweet = $('<div></div>');
-              $tweet.text(i + ' @' + tweet.user + ': ' + tweet.message + "..." + streams.home.length);
+              $tweet.text('@' + tweet.user + ': ' + tweet.message);
               $tweet.prependTo($body);
             }
             oldTweetCount = streams.home.length;
