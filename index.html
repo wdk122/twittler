@@ -32,10 +32,16 @@
               var tweet = streams.home[i];
               var $tweet     = $('<div></div>');
               var $timestamp = $('<div></div>');
-              $tweet.text('@' + tweet.user + ': ' + tweet.message);
+              var $user      = $('<a href="#"></a>');
+
+              $user.text(streams.home[i].user);
+              $tweet.text(': ' + tweet.message);
+
               $timestamp.text(streams.home[i].created_at);
+
               $timestamp.prependTo($body);
               $tweet.prependTo($body);
+              $user.prependTo($('div').first());
             }
             oldTweetCount = streams.home.length;
             setTimeout(showNewTweets, x*1000);
@@ -43,7 +49,12 @@
         showNewTweets();
 
         function showUserTweets() {
-          
+          /*
+          click username
+          clear dom 
+          append user's tweets
+
+          */
         }
 
       });
