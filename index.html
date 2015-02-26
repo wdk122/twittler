@@ -12,14 +12,29 @@
         var $body = $('body');
         $body.html('');
 
+        var oldTweetCount = streams.home.length;
         var index = streams.home.length - 1;
         while(index >= 0){
           var tweet = streams.home[index];
           var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
+          $tweet.text(index + ' @' + tweet.user + ': ' + tweet.message + "..." + streams.home.length);
           $tweet.appendTo($body);
           index -= 1;
         }
+
+        function showNewTweets() {
+            var x = 3;  // 5 Second interval
+
+            for (var i = oldTweetCount; i < streams.home.length; i++) { //print new tweets 
+              var tweet = streams.home[i];
+              var $tweet = $('<div></div>');
+              $tweet.text(i + ' @' + tweet.user + ': ' + tweet.message + "..." + streams.home.length);
+              $tweet.prependTo($body);
+            }
+            oldTweetCount = streams.home.length;
+            setTimeout(showNewTweets, x*1000);
+        }
+        showNewTweets();
 
       });
 
