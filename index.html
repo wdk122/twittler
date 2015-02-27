@@ -27,62 +27,58 @@
 
 
         var showNewTweets = function() {
+          // ====================================================
+          for (var i = oldTweetCount; i < streams.home.length; i++) {  
+            var tweet      = streams.home[i];
+            var $tweet     = $('<div class="message"></div>');
+            var $timestamp = $('<div></div>');
+            var $user      = $('<a class="username" href="#"></a>');
 
-            for (var i = oldTweetCount; i < streams.home.length; i++) {  
-              var tweet      = streams.home[i];
+
+            $user.text("@" + streams.home[i].user);
+            $user.addClass("@" + streams.home[i].user);
+            $tweet.text(': ' + tweet.message);
+            $timestamp.text(streams.home[i].created_at);
+
+            $timestamp.prependTo($('#main'));
+            $tweet.prependTo($('#main'));
+            $user.prependTo($('.message').first());
+          }
+          oldTweetCount = streams.home.length;
+          refreshNewTweets = setTimeout(showNewTweets, 2000);
+          // ====================================================
+          $('.username').on('click', function() {
+            clearTimeout(refreshNewTweets);
+
+            var handle = $(this).text();
+            handle = handle.slice(1, handle.length);
+
+            // clear main div
+            $('#main').text('');
+            $('h1').text("@" + handle); 
+
+            _.each(streams.users[handle], function(x) {
+
+              var tweet      = x.message;
               var $tweet     = $('<div class="message"></div>');
               var $timestamp = $('<div></div>');
-              var $user      = $('<a class="username" href="#"></a>');
 
-
-              $user.text("@" + streams.home[i].user);
-              $user.addClass("@" + streams.home[i].user);
-              $tweet.text(': ' + tweet.message);
-              $timestamp.text(streams.home[i].created_at);
+              $tweet.text(x.message);
+              $timestamp.text(x.created_at);
 
               $timestamp.prependTo($('#main'));
               $tweet.prependTo($('#main'));
-              $user.prependTo($('.message').first());
-            }
-            oldTweetCount = streams.home.length;
-            refreshNewTweets = setTimeout(showNewTweets, 2000);
-            
-            $('.username').on('click', function() {
-              clearTimeout(refreshNewTweets);
-              var handle = $(this).text();
-              handle = handle.slice(1, handle.length);     // get handle for use in calling 
-              $('#main').text('');                         // clear main div
-              $('h1').text("@" + handle); 
 
-              // debugger;
-
-              _.each(streams.users[handle], function(x) {
-
-                var tweet      = x.message;
-                var $tweet     = $('<div class="message"></div>');
-                var $timestamp = $('<div></div>');
-                // var $user      = $('<a class="username" href="#"></a>');
-
-
-                // $user.text("@" + streams.home[i].user);
-                // $user.addClass("@" + streams.home[i].user);
-                $tweet.text(x.message);
-                $timestamp.text(x.created_at);
-
-                $timestamp.prependTo($('#main'));
-                $tweet.prependTo($('#main'));
-
-
-                // $user.prependTo($('.message').first());
-              });
-              /*
-              [x] clear main div
-              [x] change h1 to username
-              [x] call reference to list of user's tweets
-              [x] show user tweet timeline
-              [ ] make user tweet timeline autorefresh
-              */
             });
+
+            /*
+            [x] clear main div
+            [x] change h1 to username
+            [x] call reference to list of user's tweets
+            [x] show user tweet timeline
+            [ ] make user tweet timeline autorefresh
+            */
+          });
         };
         
         $('<div id="main"></div>').prependTo($body);
