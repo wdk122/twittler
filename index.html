@@ -23,7 +23,7 @@
 
 
         var oldTweetCount = 0;
-        var refreshNewTweets;
+        var refreshNewTweets, handle;
 
 
         var showNewTweets = function() {
@@ -47,29 +47,28 @@
           oldTweetCount = streams.home.length;
           refreshNewTweets = setTimeout(showNewTweets, 2000);
           // ====================================================
-          $('.username').on('click', function() {
+          // create another timeout to autorefresh user tweets
+
+          var showUserTweets = function() {
             clearTimeout(refreshNewTweets);
-
-            var handle = $(this).text();
-            handle = handle.slice(1, handle.length);
-
+            handle = handle || $(this).text().slice(1, $(this).text().length);
+            // debugger;
             // clear main div
             $('#main').text('');
             $('h1').text("@" + handle); 
+            var oldUserTweetCount = 0;
 
-            _.each(streams.users[handle], function(x) {
-
-              var tweet      = x.message;
+            for (var j = oldUserTweetCount; j < streams.users[handle].length; j++) {
+              var tweet      = streams.users[handle][j];
               var $tweet     = $('<div class="message"></div>');
               var $timestamp = $('<div></div>');
-
-              $tweet.text(x.message);
-              $timestamp.text(x.created_at);
-
+              $tweet.text(tweet.message);
+              $timestamp.text(tweet.created_at);
               $timestamp.prependTo($('#main'));
               $tweet.prependTo($('#main'));
-
-            });
+              oldUserTweetCount = streams.users[handle].length;
+            }
+            var refreshUserTweets = setTimeout(showUserTweets, 2000);
 
             /*
             [x] clear main div
@@ -78,7 +77,8 @@
             [x] show user tweet timeline
             [ ] make user tweet timeline autorefresh
             */
-          });
+          };
+          $('.username').on('click', showUserTweets);
         };
         
         $('<div id="main"></div>').prependTo($body);
